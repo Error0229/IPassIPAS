@@ -344,7 +344,7 @@ const QuizApp = () => {
               <AlertDescription>
                 {selectedAnswer === currentQuestion.correct_answer
                   ? "答對了！"
-                  : `答錯了！正確答案是: ${currentQuestion.correct_answer}`
+                  : `答錯了！正確答案是: ${parseContent(currentQuestion.correct_answer)}`
                 }
               </AlertDescription>
             </Alert>
