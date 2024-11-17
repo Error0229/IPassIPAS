@@ -12,6 +12,32 @@ import { useTheme } from "next-themes";
 
 const STORAGE_KEY = 'quiz_history';
 const WRONG_ANSWERS_KEY = 'wrong_answers';
+const parseContent = (content) => {
+  if (!content.includes('[IMAGE]')) {
+    return <span>{content}</span>;
+  }
+
+  const parts = content.split(/(\[IMAGE\].*?\[IMAGE\])/);
+  return (
+    <div className="flex flex-col gap-2">
+      {parts.map((part, index) => {
+        if (part.startsWith('[IMAGE]') && part.endsWith('[IMAGE]')) {
+          const imageUrl = part.replace(/\[IMAGE\]/g, '').split('#')[0];
+          return (
+            <img
+              key={index}
+              src={imageUrl}
+              alt="Question content"
+              className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700"
+              loading="lazy"
+            />
+          );
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </div>
+  );
+};
 const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -265,7 +291,7 @@ const QuizApp = () => {
                   {currentQuestion.year} 年度題目
                 </div>
                 <div className="text-lg mb-6">
-                  {currentQuestion.question}
+                  {parseContent(currentQuestion.question)}
                 </div>
                 <div className="space-y-3">
                   {currentQuestion.options.map((option, index) => (
@@ -278,7 +304,7 @@ const QuizApp = () => {
                             : "destructive"
                           : "outline"
                       }
-                      className="w-full justify-start text-left"
+                      className="w-full justify-start text-left flex items-start p-4 h-auto whitespace-normal min-h-[2.5rem]"
                       onClick={() => handleAnswerSelect(option)}
                       disabled={isAnswered}
                     >
@@ -287,7 +313,7 @@ const QuizApp = () => {
                           ? <Check className="mr-2 h-4 w-4" />
                           : <X className="mr-2 h-4 w-4" />
                       )}
-                      {option}
+                      {parseContent(option)}
                     </Button>
                   ))}
                 </div>
@@ -349,9 +375,9 @@ const QuizApp = () => {
                       <div className="text-sm text-gray-500 mb-2">
                         {new Date(item.timestamp).toLocaleString()}
                       </div>
-                      <div className="mb-2">{item.question}</div>
-                      <div className="text-red-500">您的答案: {item.userAnswer}</div>
-                      <div className="text-green-500">正確答案: {item.correct_answer}</div>
+                      <div className="mb-2">{parseContent(item.question)}</div>
+                      <div className="text-red-500">您的答案: {parseContent(item.userAnswer)}</div>
+                      <div className="text-green-500">正確答案: {parseContent(item.correct_answer)}</div>
                     </div>
                   ))}
                 </div>
@@ -383,10 +409,10 @@ const QuizApp = () => {
                       {item.isCorrect ? "答對" : "答錯"}
                     </div>
                     <div className="text-sm text-gray-500">
-                      您的答案: {item.userAnswer}
+                      您的答案: {parseContent(item.userAnswer)}
                       {!item.isCorrect && (
                         <div className="text-green-500">
-                          正確答案: {item.correct_answer}
+                          正確答案: {parseContent(item.correct_answer)}
                         </div>
                       )}
                     </div>
