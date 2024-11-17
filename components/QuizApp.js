@@ -52,8 +52,8 @@ const QuizApp = () => {
   const [activeTab, setActiveTab] = useState('practice');
 
   const getUnsolvedQuestions = (allQuestions, history) => {
-    const solvedQuestionTexts = new Set(history.map(item => item.question));
-    return allQuestions.filter(question => !solvedQuestionTexts.has(question.question));
+    const solvedQuestionTexts = new Set(history.map(item => item.question.replace(/\n\s*/g, '')));
+    return allQuestions.filter(question => !solvedQuestionTexts.has(question.question.replace(/\n\s*/g, '')));
   };
   // 載入題目和歷史記錄
   useEffect(() => {
