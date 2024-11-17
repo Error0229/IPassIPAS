@@ -338,17 +338,27 @@ const QuizApp = () => {
               )}
             </CardFooter>
           </Card>
-
           {showFeedback && (
-            <Alert variant={selectedAnswer === currentQuestion.correct_answer ? "success" : "destructive"} className="mt-4">
+            <Alert
+              variant={selectedAnswer === currentQuestion.correct_answer ? "default" : "destructive"}
+              className={`mt-4 ${selectedAnswer === currentQuestion.correct_answer
+                ? "border-green-500 text-green-500"
+                : ""
+                }`}
+            >
               <AlertDescription>
                 {selectedAnswer === currentQuestion.correct_answer
                   ? "答對了！"
-                  : `答錯了！正確答案是: ${parseContent(currentQuestion.correct_answer)}`
+                  : "答錯了！正確答案是: "
+                }
+                {selectedAnswer === currentQuestion.correct_answer
+                  ? []
+                  : parseContent(currentQuestion.correct_answer)
                 }
               </AlertDescription>
             </Alert>
           )}
+
         </TabsContent>
 
         <TabsContent value="wrong-answers">
@@ -404,7 +414,7 @@ const QuizApp = () => {
                     <div className="text-sm text-gray-500 mb-2">
                       {new Date(item.timestamp).toLocaleString()}
                     </div>
-                    <div className="mb-2">{item.question}</div>
+                    <div className="mb-2">{parseContent(item.question)}</div>
                     <div className={item.isCorrect ? "text-green-500" : "text-red-500"}>
                       {item.isCorrect ? "答對" : "答錯"}
                     </div>
