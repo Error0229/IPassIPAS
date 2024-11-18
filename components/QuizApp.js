@@ -9,6 +9,7 @@ import { Progress } from "./ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ArrowRight, Check, X, Loader2, RotateCcw, History, BookOpen, Moon, Sun } from 'lucide-react';
 import { useTheme } from "next-themes";
+import Image from 'next/image'
 
 const STORAGE_KEY = 'quiz_history';
 const WRONG_ANSWERS_KEY = 'wrong_answers';
@@ -24,11 +25,18 @@ const parseContent = (content) => {
         if (part.startsWith('[IMAGE]') && part.endsWith('[IMAGE]')) {
           const imageUrl = part.replace(/\[IMAGE\]/g, '').split('#')[0];
           return (
-            <img
+            <Image 
               key={index}
               src={imageUrl}
               alt="Question content"
-              className="max-w-full h-auto rounded-lg border border-gray-200 dark:border-gray-700"
+              sizes="100vw"
+              style={{
+                width: 'auto',
+                height: '100%',
+              }}
+              width={500}
+              height={500}
+              className="rounded-lg border border-gray-200 dark:border-gray-700"
               loading="lazy"
             />
           );
